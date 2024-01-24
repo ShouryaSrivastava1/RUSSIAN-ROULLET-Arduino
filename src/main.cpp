@@ -8,5 +8,21 @@ void setup()
 
 void loop()
 {
-  Roullet.PlayRound_1();
+  if(Roullet.Round == 1)
+  {
+    Roullet.PlayRound_1();
+  }
+  else if(Roullet.Round == 2)
+  {
+    Roullet.PlayRound_2();
+  }
+  else if(Roullet.Round == 3)
+  {
+    Roullet.PlayRound_3();
+  }
+  else
+  {
+    ScoreBoard.setCursor(0,0);
+    ScoreBoard.print("Game Over-Reset");
+  }
 }

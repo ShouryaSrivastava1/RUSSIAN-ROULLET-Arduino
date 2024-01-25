@@ -98,6 +98,7 @@ void RUSSIANROULLET::PlayRound_1()
         blankBullets = TotalBullets - LiveBullets; 
         CurrentBullet = random(0,2);
         Has_Chosen_Bullets = true;
+        Turn = 1;
         ShowRound();
         ShowBullets();
     }
@@ -207,7 +208,25 @@ void RUSSIANROULLET::PlayRound_1()
         ScoreBoard.clear();
         Round++;
         Has_Chosen_Bullets = false;
-    } 
+    }
+    if(Player1_Health <= 0)
+    {
+        ScoreBoard.clear();
+        ScoreBoard.setCursor(0,0);
+        ScoreBoard.print("Player 2 WON!");
+        Round = 4;
+        delay(2000);
+        ScoreBoard.clear();
+    }
+    else if(Player2_Health <= 0)
+    {
+        ScoreBoard.clear();
+        ScoreBoard.setCursor(0,0);
+        ScoreBoard.print("Player 1 WON!");
+        Round = 4;
+        delay(2000);
+        ScoreBoard.clear();
+    }
     ProceedTurn();
     delay(2000);
     
@@ -223,8 +242,7 @@ void RUSSIANROULLET::PlayRound_2()
         blankBullets = TotalBullets - LiveBullets; 
         CurrentBullet = random(0,2);
         Has_Chosen_Bullets = true;
-        Player1_Health = 5;
-        Player2_Health = 5;
+        Turn = 1;
         ShowRound();
         ShowBullets();
     }
@@ -335,7 +353,25 @@ void RUSSIANROULLET::PlayRound_2()
         Should_Play_Round = false;
         Round++;
         Has_Chosen_Bullets = false;
-    } 
+    }
+    if(Player1_Health <= 0)
+    {
+        ScoreBoard.clear();
+        ScoreBoard.setCursor(0,0);
+        ScoreBoard.print("Player 2 WON!");
+        Round = 4;
+        delay(2000);
+        ScoreBoard.clear();
+    }
+    else if(Player2_Health <= 0)
+    {
+        ScoreBoard.clear();
+        ScoreBoard.setCursor(0,0);
+        ScoreBoard.print("Player 1 WON!");
+        Round = 4;
+        delay(2000);
+        ScoreBoard.clear();
+    }
     ProceedTurn();
     delay(2000);
     
@@ -350,8 +386,7 @@ void RUSSIANROULLET::PlayRound_3()
         blankBullets = TotalBullets - LiveBullets; 
         CurrentBullet = random(0,2);
         Has_Chosen_Bullets = true;
-        Player1_Health = 5;
-        Player2_Health = 5;
+        Turn = 1;
         ShowRound();
         ShowBullets();
     }
@@ -461,7 +496,25 @@ void RUSSIANROULLET::PlayRound_3()
         ScoreBoard.clear();
         Round++;
         Has_Chosen_Bullets = false;
-    } 
+    }
+    if(Player1_Health <= 0)
+    {
+        ScoreBoard.clear();
+        ScoreBoard.setCursor(0,0);
+        ScoreBoard.print("Player 2 WON!");
+        Round = 4;
+        delay(2000);
+        ScoreBoard.clear();
+    }
+    else if(Player2_Health <= 0)
+    {
+        ScoreBoard.clear();
+        ScoreBoard.setCursor(0,0);
+        ScoreBoard.print("Player 1 WON!");
+        Round = 4;
+        delay(2000);
+        ScoreBoard.clear();
+    }
     ProceedTurn();
     delay(2000);
     

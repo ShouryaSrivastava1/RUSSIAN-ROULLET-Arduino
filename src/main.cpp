@@ -3,7 +3,7 @@ RUSSIANROULLET Roullet;
 void setup()
 {
   Roullet.Start();
-  
+
 }
 
 void loop()
@@ -22,6 +22,7 @@ void loop()
   }
   else
   {
+    Roullet.FlickerLED();
     ScoreBoard.setCursor(0,0);
     ScoreBoard.print("Game Over-Reset");
   }

@@ -22,8 +22,6 @@ void loop()
   }
   else
   {
-    Roullet.FlickerLED();
-    ScoreBoard.setCursor(0,0);
-    ScoreBoard.print("Game Over-Reset");
+    Roullet.ShowWinner();
   }
 }

@@ -3,6 +3,7 @@
 #include <LiquidCrystal_I2C.h>
 #include <Servo.h>
 
+
 LiquidCrystal_I2C ScoreBoard(0x27, 16,2);
 
 class RUSSIANROULLET
@@ -20,6 +21,8 @@ class RUSSIANROULLET
     bool Has_Chosen_Bullets = false;
     bool Should_Play_Round = true;
     bool ResetHealth = true;
+    int TotalBulletsPerRoundPlay[4] = {2, 4, 6, 8};
+    int RoundPlays = 0;
 
     int Turn = 1;// 1 = Player 1, 2 = player 2
 
@@ -53,6 +56,8 @@ class RUSSIANROULLET
     void Intro();
     void ShowWinner();
     void ShowRound();
+
+    void Reload();
 
     void FlickerLED();
 
@@ -106,11 +111,12 @@ void RUSSIANROULLET::PlayRound_1()
     {
         if(ResetHealth)
         {
-        Player1_Health = 4;
-        Player2_Health = 4;
+            Player1_Health = 4;
+            Player2_Health = 4;
+            ResetHealth = false;
         }
-        TotalBullets = 4;
-        LiveBullets = random(1,5);
+        TotalBullets = TotalBulletsPerRoundPlay[RoundPlays];
+        LiveBullets = random(1, TotalBullets + 1);
         blankBullets = TotalBullets - LiveBullets; 
         CurrentBullet = random(0,2);
         Has_Chosen_Bullets = true;
@@ -220,14 +226,7 @@ void RUSSIANROULLET::PlayRound_1()
     ShowHealth();
     if(LiveBullets <= 0 && blankBullets <= 0)
     {
-        Serial.println("Round Over");
-        ScoreBoard.clear();
-        ScoreBoard.setCursor(0,0);
-        ScoreBoard.print("Reloading");
-        delay(1000);
-        ScoreBoard.clear();
-        Has_Chosen_Bullets = false;
-        ResetHealth = false;
+        Reload();
     }
     if(Player1_Health <= 0) // If First Player Losses All Health In First Round(Player 2 Wins Round)
     {
@@ -241,6 +240,7 @@ void RUSSIANROULLET::PlayRound_1()
         Has_Chosen_Bullets = false;
         ResetHealth = true;
         Player2_Round_Wins++;
+        RoundPlays = 0;
     }
     else if(Player2_Health <= 0)
     {
@@ -254,6 +254,7 @@ void RUSSIANROULLET::PlayRound_1()
         Has_Chosen_Bullets = false;
         ResetHealth = true;
         Player1_Round_Wins++;
+        RoundPlays = 0;
     }
     ProceedTurn();
     delay(500);
@@ -265,10 +266,14 @@ void RUSSIANROULLET::PlayRound_2()
     if(!Has_Chosen_Bullets)
     {
 
-        Player1_Health = 6;
-        Player2_Health = 6;
-        TotalBullets = 6;
-        LiveBullets = random(1,7);
+        if(ResetHealth)
+        {
+            Player1_Health = 6;
+            Player2_Health = 6;
+            ResetHealth = false;
+        }
+        TotalBullets = TotalBulletsPerRoundPlay[RoundPlays];
+        LiveBullets = random(1, TotalBullets + 1);
         blankBullets = TotalBullets - LiveBullets; 
         CurrentBullet = random(0,2);
         Has_Chosen_Bullets = true;
@@ -378,14 +383,7 @@ void RUSSIANROULLET::PlayRound_2()
     ShowHealth();
     if(LiveBullets <= 0 && blankBullets <= 0)
     {
-        Serial.println("Round Over");
-        ScoreBoard.clear();
-        ScoreBoard.setCursor(0,0);
-        ScoreBoard.print("Reloading");
-        delay(1000);
-        ScoreBoard.clear();
-        Has_Chosen_Bullets = false;
-        ResetHealth = false;
+        Reload();
     }
     if(Player1_Health <= 0)
     {
@@ -399,6 +397,7 @@ void RUSSIANROULLET::PlayRound_2()
         Has_Chosen_Bullets = false;
         ResetHealth = true;
         Player2_Round_Wins++;
+        RoundPlays = 0;
     }
     else if(Player2_Health <= 0)
     {
@@ -412,6 +411,7 @@ void RUSSIANROULLET::PlayRound_2()
         Has_Chosen_Bullets = false;
         ResetHealth = true;
         Player1_Round_Wins++;
+        RoundPlays = 0;
     }
     ProceedTurn();
     delay(500);
@@ -427,8 +427,8 @@ void RUSSIANROULLET::PlayRound_3()
             Player1_Health = 8;
             Player2_Health = 8;
         }
-        TotalBullets = 8;
-        LiveBullets = random(1,9);
+        TotalBullets = TotalBulletsPerRoundPlay[RoundPlays];
+        LiveBullets = random(1, TotalBullets +  1);
         blankBullets = TotalBullets - LiveBullets; 
         CurrentBullet = random(0,2);
         Has_Chosen_Bullets = true;
@@ -547,6 +547,7 @@ void RUSSIANROULLET::PlayRound_3()
         ScoreBoard.clear();
         Has_Chosen_Bullets = false;
         ResetHealth = false;
+        RoundPlays++;
     }
     if(Player1_Health <= 0)
     {
@@ -560,6 +561,7 @@ void RUSSIANROULLET::PlayRound_3()
         Has_Chosen_Bullets = false;
         ResetHealth = true;
         Player2_Round_Wins++;
+        RoundPlays = 0;
     }
     else if(Player2_Health <= 0)
     {
@@ -573,6 +575,7 @@ void RUSSIANROULLET::PlayRound_3()
         Has_Chosen_Bullets = false;
         ResetHealth = true;
         Player1_Round_Wins++;
+        RoundPlays = 0;
     }
     ProceedTurn();
     delay(500);
@@ -633,10 +636,10 @@ void RUSSIANROULLET::Intro()
 
 void RUSSIANROULLET::ShowWinner()
 {
-    ScoreBoard.clear();
     if(Player1_Health < Player2_Health)
     {
         ScoreBoard.setCursor(0,0);
+        ScoreBoard.print("Player 2 Won");
     }
     else
     {
@@ -655,6 +658,19 @@ void RUSSIANROULLET::ShowRound()
     ScoreBoard.setCursor(0,0);
     delay(1000);
     ScoreBoard.clear();
+}
+
+void RUSSIANROULLET::Reload()
+{
+    Serial.println("Round Over");
+    ScoreBoard.clear();
+    ScoreBoard.setCursor(0,0);
+    ScoreBoard.print("Reloading");
+    delay(1000);
+    ScoreBoard.clear();
+    Has_Chosen_Bullets = false;
+    ResetHealth = false;
+    RoundPlays++;
 }
 
 void RUSSIANROULLET::FlickerLED()

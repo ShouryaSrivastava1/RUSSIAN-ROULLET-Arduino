@@ -21,8 +21,10 @@ class RUSSIANROULLET
     bool Has_Chosen_Bullets = false;
     bool Should_Play_Round = true;
     bool ResetHealth = true;
-    int TotalBulletsPerRoundPlay[4] = {2, 4, 6, 8};
-    int RoundPlays = 0;
+    bool WaitForInputs = false;
+    bool CheckForbulletsCorrect = true;
+    int RoundPlays = 1;
+    int TotalBulletsPerRoundPlay = 2;
 
     int Turn = 1;// 1 = Player 1, 2 = player 2
 
@@ -80,7 +82,6 @@ void RUSSIANROULLET::Start()
     Serial.begin(9600);
     ScoreBoard.init();
     ScoreBoard.backlight();
-    Intro();
 
 }
 
@@ -115,7 +116,7 @@ void RUSSIANROULLET::PlayRound_1()
             Player2_Health = 4;
             ResetHealth = false;
         }
-        TotalBullets = TotalBulletsPerRoundPlay[RoundPlays];
+        TotalBullets = TotalBulletsPerRoundPlay * RoundPlays;
         LiveBullets = random(1, TotalBullets + 1);
         blankBullets = TotalBullets - LiveBullets; 
         CurrentBullet = random(0,2);
@@ -124,10 +125,12 @@ void RUSSIANROULLET::PlayRound_1()
         ShowRound();
         ShowBullets();
     }
-    if(LiveBullets > 0 && blankBullets <= 0) CurrentBullet = 1; 
-    else if(blankBullets > 0 && LiveBullets <= 0) CurrentBullet = 0;
-    if(LiveBullets == TotalBullets){ blankBullets = random(1,5); LiveBullets -= blankBullets; ShowBullets(); }
-    else if (blankBullets == TotalBullets){ LiveBullets = random(1,5); blankBullets -= LiveBullets; ShowBullets();}
+    if(LiveBullets == TotalBullets){ blankBullets = random(1,TotalBullets - 1); LiveBullets -= blankBullets; ShowBullets(); } // if Livebullets is equal to total bullets 
+    else if (blankBullets == TotalBullets){ LiveBullets = random(1,TotalBullets - 1); blankBullets -= LiveBullets; ShowBullets();} // if blank bullets is equal to live bullets
+    if(LiveBullets < 0){LiveBullets = LiveBullets * -1; ShowBullets();} // if livebullets is in negative
+    else if(blankBullets < 0 ){blankBullets = blankBullets * -1; ShowBullets();} // if blankbullets is in negative
+    if(LiveBullets > 0 && blankBullets <= 0) CurrentBullet = 1; // if blank bullets are finished
+    else if(blankBullets > 0 && LiveBullets <= 0) CurrentBullet = 0; // if livebullets are finished
     Serial.print("Current bullet: ");
     Serial.println(CurrentBullet);
     Serial.print("Live Bullets: ");
@@ -240,7 +243,7 @@ void RUSSIANROULLET::PlayRound_1()
         Has_Chosen_Bullets = false;
         ResetHealth = true;
         Player2_Round_Wins++;
-        RoundPlays = 0;
+        RoundPlays = 1;
     }
     else if(Player2_Health <= 0)
     {
@@ -254,7 +257,7 @@ void RUSSIANROULLET::PlayRound_1()
         Has_Chosen_Bullets = false;
         ResetHealth = true;
         Player1_Round_Wins++;
-        RoundPlays = 0;
+        RoundPlays = 1;
     }
     ProceedTurn();
     delay(500);
@@ -272,7 +275,7 @@ void RUSSIANROULLET::PlayRound_2()
             Player2_Health = 6;
             ResetHealth = false;
         }
-        TotalBullets = TotalBulletsPerRoundPlay[RoundPlays];
+        TotalBullets = TotalBulletsPerRoundPlay * RoundPlays;
         LiveBullets = random(1, TotalBullets + 1);
         blankBullets = TotalBullets - LiveBullets; 
         CurrentBullet = random(0,2);
@@ -283,8 +286,8 @@ void RUSSIANROULLET::PlayRound_2()
     }
     if(LiveBullets > 0 && blankBullets <= 0) CurrentBullet = 1; 
     else if(blankBullets > 0 && LiveBullets <= 0) CurrentBullet = 0;
-    if(LiveBullets == TotalBullets){ blankBullets = random(1,5); LiveBullets -= blankBullets; ShowBullets(); }
-    else if (blankBullets == TotalBullets){ LiveBullets = random(1,5); blankBullets -= LiveBullets; ShowBullets();}
+    if(LiveBullets == TotalBullets){ blankBullets = random(1, TotalBullets - 1); LiveBullets -= blankBullets; ShowBullets(); }
+    else if (blankBullets == TotalBullets){ LiveBullets = random(1, TotalBullets - 1); blankBullets -= LiveBullets; ShowBullets();}
     Serial.print("Current bullet: ");
     Serial.println(CurrentBullet);
     Serial.print("Live Bullets: ");
@@ -397,7 +400,7 @@ void RUSSIANROULLET::PlayRound_2()
         Has_Chosen_Bullets = false;
         ResetHealth = true;
         Player2_Round_Wins++;
-        RoundPlays = 0;
+        RoundPlays = 1;
     }
     else if(Player2_Health <= 0)
     {
@@ -411,7 +414,7 @@ void RUSSIANROULLET::PlayRound_2()
         Has_Chosen_Bullets = false;
         ResetHealth = true;
         Player1_Round_Wins++;
-        RoundPlays = 0;
+        RoundPlays = 1;
     }
     ProceedTurn();
     delay(500);
@@ -427,7 +430,7 @@ void RUSSIANROULLET::PlayRound_3()
             Player1_Health = 8;
             Player2_Health = 8;
         }
-        TotalBullets = TotalBulletsPerRoundPlay[RoundPlays];
+        TotalBullets = TotalBulletsPerRoundPlay * RoundPlays;
         LiveBullets = random(1, TotalBullets +  1);
         blankBullets = TotalBullets - LiveBullets; 
         CurrentBullet = random(0,2);
@@ -439,8 +442,8 @@ void RUSSIANROULLET::PlayRound_3()
     }
     if(LiveBullets > 0 && blankBullets <= 0) CurrentBullet = 1; 
     else if(blankBullets > 0 && LiveBullets <= 0) CurrentBullet = 0;
-    if(LiveBullets == TotalBullets){ blankBullets = random(1,5); LiveBullets -= blankBullets; ShowBullets(); }
-    else if (blankBullets == TotalBullets){ LiveBullets = random(1,5); blankBullets -= LiveBullets; ShowBullets();}
+    if(LiveBullets == TotalBullets){ blankBullets = random(1, TotalBullets - 1); LiveBullets -= blankBullets; ShowBullets(); }
+    else if (blankBullets == TotalBullets){ LiveBullets = random(1, TotalBullets - 1); blankBullets -= LiveBullets; ShowBullets();}
     Serial.print("Current bullet: ");
     Serial.println(CurrentBullet);
     Serial.print("Live Bullets: ");
@@ -561,7 +564,7 @@ void RUSSIANROULLET::PlayRound_3()
         Has_Chosen_Bullets = false;
         ResetHealth = true;
         Player2_Round_Wins++;
-        RoundPlays = 0;
+        RoundPlays = 1;
     }
     else if(Player2_Health <= 0)
     {
@@ -575,7 +578,7 @@ void RUSSIANROULLET::PlayRound_3()
         Has_Chosen_Bullets = false;
         ResetHealth = true;
         Player1_Round_Wins++;
-        RoundPlays = 0;
+        RoundPlays = 1;
     }
     ProceedTurn();
     delay(500);
@@ -596,6 +599,7 @@ void RUSSIANROULLET::ShowHealth()
 
 void RUSSIANROULLET::ShowBullets()
 {
+    ScoreBoard.clear();
     ScoreBoard.setCursor(0,0);
     ScoreBoard.print("Lives");
     ScoreBoard.setCursor(11,0);

@@ -21,8 +21,6 @@ class RUSSIANROULLET
     bool Has_Chosen_Bullets = false;
     bool Should_Play_Round = true;
     bool ResetHealth = true;
-    bool WaitForInputs = false;
-    bool CheckForbulletsCorrect = true;
     int RoundPlays = 1;
     int TotalBulletsPerRoundPlay = 2;
 

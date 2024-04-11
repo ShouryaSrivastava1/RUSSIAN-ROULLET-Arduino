@@ -638,7 +638,7 @@ void RUSSIANROULLET::Intro()
 
 void RUSSIANROULLET::ShowWinner()
 {
-    if(Player1_Health < Player2_Health)
+    if(Player1_Round_Wins < Player2_Round_Wins)
     {
         ScoreBoard.setCursor(0,0);
         ScoreBoard.print("Player 2 Won");

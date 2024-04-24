@@ -5,6 +5,9 @@
 
 
 LiquidCrystal_I2C ScoreBoard(0x27, 16,2);
+LiquidCrystal_I2C Player1Menue(0x23, 16,2);// change address when you get the 2 lcd displays
+LiquidCrystal_I2C Player2Menue(0x22, 16,2);// change address when you get the 2 lcd displays
+
 
 class RUSSIANROULLET
 {
@@ -23,6 +26,7 @@ class RUSSIANROULLET
     bool ResetHealth = true;
     int RoundPlays = 1;
     int TotalBulletsPerRoundPlay = 2;
+    int BulletDamage = 1;
 
     int Turn = 1;// 1 = Player 1, 2 = player 2
 
@@ -60,6 +64,10 @@ class RUSSIANROULLET
     void Reload();
 
     void FlickerLED();
+    //Item Functions
+    void Magnifying_Glass(int Player);
+    void Double_Damage(int Player);
+
 
     //Functions END
     
@@ -78,9 +86,15 @@ void RUSSIANROULLET::Start()
     digitalWrite(Player1_Led, LOW);
     digitalWrite(Player2_Led, LOW);
     Serial.begin(9600);
+
     ScoreBoard.init();
     ScoreBoard.backlight();
 
+    Player1Menue.init();
+    Player2Menue.init();
+
+    Player1Menue.backlight();    
+    Player2Menue.backlight();
 }
 
 void RUSSIANROULLET::ProceedTurn()
@@ -135,6 +149,7 @@ void RUSSIANROULLET::PlayRound_1()
   	Serial.println(LiveBullets);
   	Serial.print("Blank Bullets: ");
   	Serial.println(blankBullets);
+    Double_Damage(1);
     while(true)
     {
         ShowHealth();
@@ -150,7 +165,7 @@ void RUSSIANROULLET::PlayRound_1()
                 {
                     Serial.println("Shot Oponent");
                     LiveBullets--;
-                    Player2_Health--;
+                    Player2_Health-= BulletDamage;
                     break;
                 }
                 else if(CurrentBullet == 0)
@@ -168,7 +183,7 @@ void RUSSIANROULLET::PlayRound_1()
                 {
                     Serial.println("Shot Self");
                     LiveBullets--;
-                    Player1_Health--;
+                    Player1_Health-= BulletDamage;
                     break;
                 }
                 else if(CurrentBullet == 0)
@@ -192,7 +207,7 @@ void RUSSIANROULLET::PlayRound_1()
                 {
                     Serial.println("Shot Oponent");
                     LiveBullets--;
-                    Player1_Health--;
+                    Player1_Health-= BulletDamage;
                     break;
                 }
                 else if(CurrentBullet == 0)
@@ -210,7 +225,7 @@ void RUSSIANROULLET::PlayRound_1()
                 {
                     Serial.println("Shot Self");
                     LiveBullets--;
-                    Player2_Health--;
+                    Player2_Health-= BulletDamage;
                     break;
                 }
                 else if(CurrentBullet == 0)
@@ -224,6 +239,7 @@ void RUSSIANROULLET::PlayRound_1()
         }
         
     }
+    BulletDamage = 1;
     ShowHealth();
     if(LiveBullets <= 0 && blankBullets <= 0)
     {
@@ -307,7 +323,7 @@ void RUSSIANROULLET::PlayRound_2()
                 {
                     Serial.println("Shot Oponent");
                     LiveBullets--;
-                    Player2_Health--;
+                    Player2_Health-= BulletDamage;
                     break;
                 }
                 else if(CurrentBullet == 0)
@@ -325,7 +341,7 @@ void RUSSIANROULLET::PlayRound_2()
                 {
                     Serial.println("Shot Self");
                     LiveBullets--;
-                    Player1_Health--;
+                    Player1_Health-= BulletDamage;
                     break;
                 }
                 else if(CurrentBullet == 0)
@@ -349,7 +365,7 @@ void RUSSIANROULLET::PlayRound_2()
                 {
                     Serial.println("Shot Oponent");
                     LiveBullets--;
-                    Player1_Health--;
+                    Player1_Health-= BulletDamage;
                     break;
                 }
                 else if(CurrentBullet == 0)
@@ -367,7 +383,7 @@ void RUSSIANROULLET::PlayRound_2()
                 {
                     Serial.println("Shot Self");
                     LiveBullets--;
-                    Player2_Health--;
+                    Player2_Health-= BulletDamage;
                     break;
                 }
                 else if(CurrentBullet == 0)
@@ -381,6 +397,7 @@ void RUSSIANROULLET::PlayRound_2()
         }
         
     }
+    BulletDamage = 1;
     ShowHealth();
     if(LiveBullets <= 0 && blankBullets <= 0)
     {
@@ -463,7 +480,7 @@ void RUSSIANROULLET::PlayRound_3()
                 {
                     Serial.println("Shot Oponent");
                     LiveBullets--;
-                    Player2_Health--;
+                    Player2_Health-= BulletDamage;
                     break;
                 }
                 else if(CurrentBullet == 0)
@@ -481,7 +498,7 @@ void RUSSIANROULLET::PlayRound_3()
                 {
                     Serial.println("Shot Self");
                     LiveBullets--;
-                    Player1_Health--;
+                    Player1_Health-= BulletDamage;
                     break;
                 }
                 else if(CurrentBullet == 0)
@@ -506,7 +523,7 @@ void RUSSIANROULLET::PlayRound_3()
                 {
                     Serial.println("Shot Oponent");
                     LiveBullets--;
-                    Player1_Health--;
+                    Player1_Health-= BulletDamage;
                     break;
                 }
                 else if(CurrentBullet == 0)
@@ -524,7 +541,7 @@ void RUSSIANROULLET::PlayRound_3()
                 {
                     Serial.println("Shot Self");
                     LiveBullets--;
-                    Player2_Health--;
+                    Player2_Health-= BulletDamage;
                     break;
                 }
                 else if(CurrentBullet == 0)
@@ -538,17 +555,11 @@ void RUSSIANROULLET::PlayRound_3()
         }
         
     }
+    BulletDamage = 1;
+    ShowHealth();
     if(LiveBullets <= 0 && blankBullets <= 0)
     {
-        Serial.println("Round Over");
-        ScoreBoard.clear();
-        ScoreBoard.setCursor(0,0);
-        ScoreBoard.print("Reloading");
-        delay(1000);
-        ScoreBoard.clear();
-        Has_Chosen_Bullets = false;
-        ResetHealth = false;
-        RoundPlays++;
+        Reload();
     }
     if(Player1_Health <= 0)
     {
@@ -683,4 +694,91 @@ void RUSSIANROULLET::FlickerLED()
     digitalWrite(Player1_Led, 0);
     digitalWrite(Player2_Led, 1);
     delay(70);
+}
+
+void RUSSIANROULLET::Magnifying_Glass(int Player)
+{
+    if(Player == 1)
+    {    
+        ScoreBoard.clear();
+        ScoreBoard.setCursor(0,0);
+        ScoreBoard.print("Player 1 Used:");
+        ScoreBoard.setCursor(0,1);
+        ScoreBoard.print("Magnifying Glass");
+        if(CurrentBullet == 1)
+        {
+            Player1Menue.clear();
+            Player1Menue.setCursor(0,0);
+            Player1Menue.print("Live Bullet");
+            delay(2000);
+            Player1Menue.clear();
+        }
+        else if(CurrentBullet == 0)
+        {
+            Player1Menue.clear();
+            Player1Menue.setCursor(0,0);
+            Player1Menue.print("Blank Bullet");
+            delay(2000);
+            Player1Menue.clear();
+        }
+    }
+    else if(Player == 2)
+    {
+        ScoreBoard.clear();
+        ScoreBoard.setCursor(0,0);
+        ScoreBoard.print("Player 2 Used:");
+        ScoreBoard.setCursor(0,1);
+        ScoreBoard.print("Magnifying Glass");
+        if(CurrentBullet == 1)
+        {
+            Player2Menue.clear();
+            Player2Menue.setCursor(0,0);
+            Player2Menue.print("Live Bullet");
+            delay(2000);
+            Player2Menue.clear();
+        }
+        else if(CurrentBullet == 0)
+        {
+            Player2Menue.clear();
+            Player2Menue.setCursor(0,0);
+            Player2Menue.print("Blank Bullet");
+            delay(2000);
+            Player2Menue.clear();
+        }
+    }
+    ScoreBoard.clear();
+}
+
+void RUSSIANROULLET::Double_Damage(int Player)
+{
+    if(Player == 1)
+    {
+        ScoreBoard.clear();
+        ScoreBoard.setCursor(0,0);
+        ScoreBoard.print("Player 1 Used");
+        ScoreBoard.setCursor(0,1);
+        ScoreBoard.print("Double Damage");
+        Player1Menue.clear();
+        Player1Menue.setCursor(0,0);
+        Player1Menue.print("Using:");
+        Player1Menue.setCursor(0,1);
+        Player1Menue.print("Double Damage");
+        delay(2000);
+    }
+    else if(Player == 2)
+    {
+        ScoreBoard.clear();
+        ScoreBoard.setCursor(0,0);
+        ScoreBoard.print("Player 2 Used");
+        ScoreBoard.setCursor(0,1);
+        ScoreBoard.print("Double Damage");
+        Player2Menue.clear();
+        Player2Menue.setCursor(0,0);
+        Player2Menue.print("Using:");
+        Player2Menue.setCursor(0,1);
+        Player2Menue.print("Double Damage");
+        delay(2000);
+    }
+    BulletDamage = 2;
+    ScoreBoard.clear();
 }

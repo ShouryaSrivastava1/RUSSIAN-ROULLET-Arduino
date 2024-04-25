@@ -66,8 +66,10 @@ class RUSSIANROULLET
     void FlickerLED();
     //Item Functions
     void Magnifying_Glass(int Player);
-    void Double_Damage(int Player);
-
+    void Saw(int Player);
+    void HandCuffs(int Player);
+    void Cigartte(int Player);
+    void Beer(int Player);
 
     //Functions END
     
@@ -149,7 +151,6 @@ void RUSSIANROULLET::PlayRound_1()
   	Serial.println(LiveBullets);
   	Serial.print("Blank Bullets: ");
   	Serial.println(blankBullets);
-    Double_Damage(1);
     while(true)
     {
         ShowHealth();
@@ -749,13 +750,13 @@ void RUSSIANROULLET::Magnifying_Glass(int Player)
     ScoreBoard.clear();
 }
 
-void RUSSIANROULLET::Double_Damage(int Player)
+void RUSSIANROULLET::Saw(int Player)
 {
     if(Player == 1)
     {
         ScoreBoard.clear();
         ScoreBoard.setCursor(0,0);
-        ScoreBoard.print("Player 1 Used");
+        ScoreBoard.print("Player 1 Used:");
         ScoreBoard.setCursor(0,1);
         ScoreBoard.print("Double Damage");
         Player1Menue.clear();
@@ -769,7 +770,7 @@ void RUSSIANROULLET::Double_Damage(int Player)
     {
         ScoreBoard.clear();
         ScoreBoard.setCursor(0,0);
-        ScoreBoard.print("Player 2 Used");
+        ScoreBoard.print("Player 2 Used:");
         ScoreBoard.setCursor(0,1);
         ScoreBoard.print("Double Damage");
         Player2Menue.clear();
@@ -777,8 +778,143 @@ void RUSSIANROULLET::Double_Damage(int Player)
         Player2Menue.print("Using:");
         Player2Menue.setCursor(0,1);
         Player2Menue.print("Double Damage");
-        delay(2000);
+        delay(2000);  
     }
     BulletDamage = 2;
     ScoreBoard.clear();
+}
+
+void RUSSIANROULLET::HandCuffs(int Player)
+{
+    ScoreBoard.clear();
+    if(Player == 1)
+    {
+        ScoreBoard.print("Player 1 Used:");
+        ScoreBoard.setCursor(0,1);
+        ScoreBoard.print("HandCuffs");
+        Player1Menue.clear();
+        Player1Menue.setCursor(0,0);
+        Player1Menue.print("You Now Have An");
+        Player1Menue.setCursor(0,1);;
+        Player1Menue.print("Extra Turn");
+        delay(2000);
+        P1_Has_2_Turns = true;
+    }
+    else if(Player == 2)
+    {
+        ScoreBoard.print("Player 2 Used:");
+        ScoreBoard.setCursor(0,1);
+        ScoreBoard.print("HandCuffs");
+        Player2Menue.clear();
+        Player2Menue.setCursor(0,0);
+        Player2Menue.print("You Now Have An");
+        Player2Menue.setCursor(0,1);;
+        Player2Menue.print("Extra Turn");
+        delay(2000);
+        P2_Has_2_Turns = true;
+    }
+    ScoreBoard.clear();
+    Player1Menue.clear();
+    Player2Menue.clear();
+}
+
+void RUSSIANROULLET::Cigartte(int Player)
+{
+    ScoreBoard.clear();
+    if(Player == 1)
+    {
+        ScoreBoard.print("Player 1 Used:");
+        ScoreBoard.setCursor(0,1);
+        ScoreBoard.print("Cigarette");
+        Player1Menue.clear();
+        Player1Menue.setCursor(0,0);
+        Player1Menue.print("You Now Have");
+        Player1Menue.setCursor(0,1);;
+        Player1Menue.print("+1 Health Point");
+        delay(2000);
+        Player1_Health++;
+    }
+    else if(Player == 2)
+    {
+        ScoreBoard.print("Player 2 Used:");
+        ScoreBoard.setCursor(0,1);
+        ScoreBoard.print("Cigarette");
+        Player2Menue.clear();
+        Player2Menue.setCursor(0,0);
+        Player2Menue.print("You Now Have An");
+        Player2Menue.setCursor(0,1);;
+        Player2Menue.print("+1 Health Point");
+        delay(2000);
+        Player2_Health++;
+    }
+    ScoreBoard.clear();
+    Player1Menue.clear();
+    Player2Menue.clear();
+}
+
+void RUSSIANROULLET::Beer(int Player)
+{
+    ScoreBoard.clear();
+    if(Player == 1)
+    {
+        ScoreBoard.print("Player 1 Used:");
+        ScoreBoard.setCursor(0,1);
+        ScoreBoard.print("Beer Can");
+        Player1Menue.clear();
+        Player1Menue.setCursor(0,0);
+        Player1Menue.print("Using:");
+        Player1Menue.setCursor(0,1);
+        Player1Menue.print("Beer Can");
+        if(CurrentBullet == 1)
+        {
+            ScoreBoard.clear();
+            ScoreBoard.setCursor(0,0);
+            ScoreBoard.print("The Bullet Was:");
+            ScoreBoard.setCursor(0,1);
+            ScoreBoard.print("Live");
+            LiveBullets--;
+        }
+        else if(CurrentBullet == 0)
+        {
+            ScoreBoard.clear();
+            ScoreBoard.setCursor(0,0);
+            ScoreBoard.print("The Bullet Was:");
+            ScoreBoard.setCursor(0,1);
+            ScoreBoard.print("Blank");
+            blankBullets--;
+        }
+    }
+    else if(Player == 2)
+    {
+        ScoreBoard.print("Player 2 Used:");
+        ScoreBoard.setCursor(0,1);
+        ScoreBoard.print("Beer Can");
+        Player2Menue.clear();
+        Player2Menue.setCursor(0,0);
+        Player2Menue.print("Using:");
+        Player2Menue.setCursor(0,1);
+        Player2Menue.print("Beer Can");
+        if(CurrentBullet == 1)
+        {
+            ScoreBoard.clear();
+            ScoreBoard.setCursor(0,0);
+            ScoreBoard.print("The Bullet Was:");
+            ScoreBoard.setCursor(0,1);
+            ScoreBoard.print("Live");
+            LiveBullets--;
+        }
+        else if(CurrentBullet == 0)
+        {
+            ScoreBoard.clear();
+            ScoreBoard.setCursor(0,0);
+            ScoreBoard.print("The Bullet Was:");
+            ScoreBoard.setCursor(0,1);
+            ScoreBoard.print("Blank");
+            blankBullets--;
+        }
+    }
+    delay(2000);
+    ScoreBoard.clear();
+    Player1Menue.clear();
+    Player2Menue.clear();
 }

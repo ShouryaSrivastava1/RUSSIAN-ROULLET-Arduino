@@ -65,11 +65,20 @@ class RUSSIANROULLET
 
     void FlickerLED();
     //Item Functions
-    void Magnifying_Glass(int Player);
+    // Tell the player which type of bullet it is
+    void Magnifying_Glass(int Player); 
+    // increase output damage to 2
     void Saw(int Player);
+    // Give the using player 2 turns
     void HandCuffs(int Player);
+    // regen 1 health point
     void Cigartte(int Player);
+    // remove the current bullet telling its type
     void Beer(int Player);
+    // make live bullet blank and blank bullet live
+    void Inverter(int Player);
+    // 40 % Chance to gain 2 HP and 60 % Chance to lose 1 HP
+    void ExpiredMedicine(int Player);
 
     //Functions END
     
@@ -911,6 +920,113 @@ void RUSSIANROULLET::Beer(int Player)
             ScoreBoard.setCursor(0,1);
             ScoreBoard.print("Blank");
             blankBullets--;
+        }
+    }
+    delay(2000);
+    ScoreBoard.clear();
+    Player1Menue.clear();
+    Player2Menue.clear();
+}
+
+void RUSSIANROULLET::Inverter(int Player)
+{
+    ScoreBoard.clear();
+    if(Player == 1)
+    {
+        ScoreBoard.print("Player 1 Used:");
+        ScoreBoard.setCursor(0,1);
+        ScoreBoard.print("Inverter");
+        Player1Menue.clear();
+        Player1Menue.setCursor(0,0);
+        Player1Menue.print("Using:");
+        Player1Menue.setCursor(0,1);
+        Player1Menue.print("Inverter");
+        if(CurrentBullet == 1)
+        {
+            CurrentBullet = 0;
+        }
+        else if(CurrentBullet == 0)
+        {
+            CurrentBullet = 1;
+        }
+    }
+    else if(Player == 2)
+    {
+        ScoreBoard.print("Player 2 Used:");
+        ScoreBoard.setCursor(0,1);
+        ScoreBoard.print("Inverter");
+        Player2Menue.clear();
+        Player2Menue.setCursor(0,0);
+        Player2Menue.print("Using:");
+        Player2Menue.setCursor(0,1);
+        Player2Menue.print("Inverter");
+        if(CurrentBullet == 1)
+        {
+            CurrentBullet = 0;
+        }
+        else if(CurrentBullet == 0)
+        {
+            CurrentBullet = 1;
+        }
+    }
+    delay(2000);
+    ScoreBoard.clear();
+    Player1Menue.clear();
+    Player2Menue.clear();
+}
+
+void RUSSIANROULLET::ExpiredMedicine(int Player)
+{
+    int Chance = random(1, 100);
+    ScoreBoard.clear();
+    if(Player == 1)
+    {
+        ScoreBoard.setCursor(0,0);
+        ScoreBoard.print("Player 1 Used:");
+        ScoreBoard.setCursor(0,1);
+        ScoreBoard.print("Expired Medicine");
+        Player1Menue.setCursor(0,0);
+        Player1Menue.print("Using:");
+        Player1Menue.setCursor(0,1);
+        Player1Menue.print("Expired Medicine");
+        if(Chance <= 40)
+        {
+            ScoreBoard.clear();
+            ScoreBoard.setCursor(0,0);
+            ScoreBoard.print("Player 1 Gained HP");
+            Player1_Health += 2;
+        }
+        else
+        {
+            ScoreBoard.clear();
+            ScoreBoard.setCursor(0,0);
+            ScoreBoard.print("Player 1 Lost HP");
+            Player1_Health--;
+        }
+    }
+    else if(Player == 2)
+    {
+        ScoreBoard.setCursor(0,0);
+        ScoreBoard.print("Player 2 Used:");
+        ScoreBoard.setCursor(0,1);
+        ScoreBoard.print("Expired Medicine");
+        Player2Menue.setCursor(0,0);
+        Player2Menue.print("Using:");
+        Player2Menue.setCursor(0,1);
+        Player2Menue.print("Expired Medicine");
+        if(Chance <= 40)
+        {
+            ScoreBoard.clear();
+            ScoreBoard.setCursor(0,0);
+            ScoreBoard.print("Player 2 Gained HP");
+            Player2_Health += 2;
+        }
+        else
+        {
+            ScoreBoard.clear();
+            ScoreBoard.setCursor(0,0);
+            ScoreBoard.print("Player 2 Lost HP");
+            Player2_Health--;
         }
     }
     delay(2000);

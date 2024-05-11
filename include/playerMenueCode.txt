@@ -1,0 +1,172 @@
+#include <LiquidCrystal_I2C.h>
+
+LiquidCrystal_I2C lcd(0x27, 16,2);
+int ItemIndex = 0;
+String Items[] = {"Magnifying Glass", "Saw", "HandCuffs", "Cigarette", "Beer", "Inverter", "Expired Medicine"};
+int ItemQuantity[] = {0, 0, 0, 0, 0, 0, 0};
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+  pinMode(2, OUTPUT);
+  pinMode(3, OUTPUT);
+  lcd.init();
+  lcd.backlight();
+  randomSeed(analogRead(A1));
+  // put in round 2 and 3
+  for(int i = 0; i < 3; i++)
+  {
+    ItemQuantity[random(0,7)] += 1;
+    delay(3);
+  }
+
+} 
+void loop() {
+  // put your main code here, to run repeatedly:
+  lcd.setCursor(0,0);
+  lcd.print(Items[ItemIndex]);
+  lcd.setCursor(8, 1);
+  lcd.print("0");
+  lcd.setCursor(9,1);
+  lcd.print(ItemQuantity[ItemIndex]);
+  if(digitalRead(3) == 1)
+  {
+    lcd.clear();
+    ItemIndex++;
+    if(ItemIndex > 6) ItemIndex = 0;
+    delay(200);
+  }
+
+  if(digitalRead(2) == 1)
+  {
+    String CurrentItem = Items[ItemIndex];
+    Serial.println(CurrentItem);
+    delay(200);
+    if(CurrentItem.equalsIgnoreCase("magnifying glass"))
+    {
+      if(ItemQuantity[ItemIndex] > 0)
+      {
+        lcd.clear();
+        lcd.print("USED MG");
+        delay(1000);
+        ItemQuantity[ItemIndex]--;
+        lcd.clear();
+      }
+      else
+      {
+        lcd.clear();
+        lcd.print("Cant USED MG");
+        delay(1000);
+        lcd.clear();
+      }
+    }
+    else if(CurrentItem.equalsIgnoreCase("saw"))
+    {
+      if(ItemQuantity[ItemIndex] > 0)
+      {
+        lcd.clear();
+        lcd.print("USED Saw");
+        delay(1000);
+        ItemQuantity[ItemIndex]--;
+        lcd.clear();
+      }
+      else
+      {
+        lcd.clear();
+        lcd.print("Cant USE Saw");
+        delay(1000);
+        lcd.clear();
+      }
+    }
+    else if(CurrentItem.equalsIgnoreCase("handcuffs"))
+    {
+      if(ItemQuantity[ItemIndex] > 0)
+      {
+        lcd.clear();
+        lcd.print("USED handCuffs");
+        delay(1000);
+        ItemQuantity[ItemIndex]--;
+        lcd.clear();
+      }
+      else
+      {
+        lcd.clear();
+        lcd.print("Cant USED handcuffs");
+        delay(1000);
+        lcd.clear();
+      }
+    }
+    else if(CurrentItem.equalsIgnoreCase("cigarette"))
+    {
+      if(ItemQuantity[ItemIndex] > 0)
+      {
+        lcd.clear();
+        lcd.print("USED cigarette");
+        delay(1000);
+        ItemQuantity[ItemIndex]--;
+        lcd.clear();
+      }
+      else
+      {
+        lcd.clear();
+        lcd.print("Cant USED cigarette");
+        delay(1000);
+        lcd.clear();
+      }
+    }
+    else if(CurrentItem.equalsIgnoreCase("beer"))
+    {
+      if(ItemQuantity[ItemIndex] > 0)
+      {
+        lcd.clear();
+        lcd.print("USED beer");
+        delay(1000);
+        ItemQuantity[ItemIndex]--;
+        lcd.clear();
+      }
+      else
+      {
+        lcd.clear();
+        lcd.print("Cant USED beer");
+        delay(1000);
+        lcd.clear();
+      }
+    }
+    else if(CurrentItem.equalsIgnoreCase("inverter"))
+    {
+      if(ItemQuantity[ItemIndex] > 0)
+      {
+        lcd.clear();
+        lcd.print("USED inverter");
+        delay(1000);
+        ItemQuantity[ItemIndex]--;
+        lcd.clear();
+      }
+      else
+      {
+        lcd.clear();
+        lcd.print("Cant USED inverter");
+        delay(1000);
+        lcd.clear();
+      }
+    }
+    else if(CurrentItem.equalsIgnoreCase("expired medicine"))
+    {
+      if(ItemQuantity[ItemIndex] > 0)
+      {
+        lcd.clear();
+        lcd.print("USED expired medicine");
+        delay(1000);
+        ItemQuantity[ItemIndex]--;
+        lcd.clear();
+      }
+      else
+      {
+        lcd.clear();
+        lcd.print("Cant USED expired medicine");
+        delay(1000);
+        lcd.clear();
+      }
+    }
+
+  }
+}
